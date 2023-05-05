@@ -1,0 +1,4 @@
+ROUGH:
+
+-Use calibdb.net for camera calibration
+-For better gc, use XX:+UnlockExperimentalVMOptions -Xmx50M -Xms50M -XX:+UseG1GC - XX:MaxGCPauseMillis=2 -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem
