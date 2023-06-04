@@ -6,25 +6,61 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.StateMachineSubsystemBase;
 
-public class Drive extends SubsystemBase {
+public class Drive extends StateMachineSubsystemBase {
   public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(3.0);
+
+  public final State DISABLED;
 
   private final DriveIO io;
   private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
   private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d(), 0.0, 0.0);
+  Timer t = new Timer();
+  double last_t;
 
   /** Creates a new Drive. */
   public Drive(DriveIO io) {
+    super("Drive");
     this.io = io;
+
+    DISABLED = new State("DISABLED") {
+
+      @Override
+      public void init() {
+      }
+
+      @Override
+      public void periodic() {
+
+      }
+
+      @Override
+      public void exit() {
+
+      }
+    };
+
+    setCurrentState(DISABLED);
+    t.start();
+    last_t = t.get();
   }
 
   @Override
-  public void periodic() {
+  public void inputPeriodic() {
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Drive", inputs);
+  }
+
+  @Override
+  public void outputPeriodic() {
+
+    double time = t.get();
+    Logger.getInstance().recordOutput("Delta", time - last_t);
+    last_t = time;
 
     // Update odometry and log the new pose
     odometry.update(new Rotation2d(-inputs.gyroYawRad), getLeftPositionMeters(), getRightPositionMeters());

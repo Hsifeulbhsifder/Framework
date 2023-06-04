@@ -89,7 +89,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     drive.setDefaultCommand(
-        new RunCommand(() -> drive.driveArcade(-controller.getLeftY(), controller.getLeftX()), drive));
+        new RunCommand(() -> drive.driveArcade(-controller.getLeftY(), -controller.getRightX()), drive));
     controller.a()
         .whileTrue(new StartEndCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel));
   }
