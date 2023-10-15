@@ -134,7 +134,6 @@ public abstract class StateMachineSubsystemBase extends SubsystemBase {
   }
 
   private State currentState;
-  private Timer timer;
 
   public State getCurrentState() {
     return currentState;
@@ -166,8 +165,6 @@ public abstract class StateMachineSubsystemBase extends SubsystemBase {
   /** Creates a new StateMachineSubsystem. */
   public StateMachineSubsystemBase(String name) {
     this.setName(name);
-    timer = new Timer();
-    timer.start();
   }
 
   public abstract void outputPeriodic();
@@ -178,11 +175,11 @@ public abstract class StateMachineSubsystemBase extends SubsystemBase {
 
   @Override
   public final void periodic() {
-    double time = timer.get();
+    long time = Logger.getInstance().getRealTimestamp();
     inputPeriodic();
     currentState.basePeriodic();
     outputPeriodic();
-    Logger.getInstance().recordOutput(this.getName() + "/PerfMS", 1000.f * (timer.get() - time));
+    Logger.getInstance().recordOutput(this.getName() + "/PerfDelta", Logger.getInstance().getRealTimestamp() - time);
     Logger.getInstance().recordOutput(this.getName() + "/State", currentState.name);
   }
 

@@ -5,14 +5,15 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
+import frc.robot.Constants;
 
 public class DriveIOSim implements DriveIO {
-  private DifferentialDrivetrainSim sim = DifferentialDrivetrainSim.createKitbotSim(KitbotMotor.kDualCIMPerSide,
+  private DifferentialDrivetrainSim sim = DifferentialDrivetrainSim.createKitbotSim(KitbotMotor.kDoubleFalcon500PerSide,
       KitbotGearing.k10p71, KitbotWheelSize.kSixInch, null);
 
   @Override
   public void updateInputs(DriveIOInputs inputs) {
-    sim.update(0.02);
+    sim.update(Constants.globalDelta);
     inputs.leftPositionRad = sim.getLeftPositionMeters() / Drive.WHEEL_RADIUS_METERS;
     inputs.leftVelocityRadPerSec = sim.getLeftVelocityMetersPerSecond() / Drive.WHEEL_RADIUS_METERS;
     inputs.rightPositionRad = sim.getRightPositionMeters() / Drive.WHEEL_RADIUS_METERS;

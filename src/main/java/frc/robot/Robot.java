@@ -26,7 +26,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer robotContainer;
 
   protected Robot() {
-    super(0.02);
+    super(Constants.globalDelta);
   }
 
   /**
