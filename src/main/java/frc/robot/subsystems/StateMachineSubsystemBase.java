@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Util;
@@ -24,11 +26,14 @@ public abstract class StateMachineSubsystemBase extends SubsystemBase {
     }
 
     // Methods to override
-    public abstract void init();
+    public void init() {
+    }
 
-    public abstract void periodic();
+    public void periodic() {
+    }
 
-    public abstract void exit();
+    public void exit() {
+    }
 
     public final void baseInit() {
       init();
@@ -173,6 +178,7 @@ public abstract class StateMachineSubsystemBase extends SubsystemBase {
     inputPeriodic();
     currentState.basePeriodic();
     outputPeriodic();
+    Logger.getInstance().recordOutput(this.getName() + "/State", currentState.name);
   }
 
   public final void controlsPeriodic() {
