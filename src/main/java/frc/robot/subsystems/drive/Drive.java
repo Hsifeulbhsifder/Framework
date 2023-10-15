@@ -21,8 +21,6 @@ public class Drive extends StateMachineSubsystemBase {
   private final DriveIO io;
   private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
   private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(new Rotation2d(), 0.0, 0.0);
-  Timer t = new Timer();
-  double last_t;
   double openLoopSpeedScaling;
 
   /** Creates a new Drive. */
@@ -65,8 +63,6 @@ public class Drive extends StateMachineSubsystemBase {
     };
 
     setCurrentState(DISABLED);
-    t.start();
-    last_t = t.get();
   }
 
   @Override
@@ -77,11 +73,6 @@ public class Drive extends StateMachineSubsystemBase {
 
   @Override
   public void outputPeriodic() {
-
-    double time = t.get();
-    Logger.getInstance().recordOutput("Drive/Delta", time - last_t);
-    last_t = time;
-
     // Update odometry and log the new pose
     odometry.update(new Rotation2d(-inputs.gyroYawRad), getLeftPositionMeters(), getRightPositionMeters());
     Logger.getInstance().recordOutput("Drive/Odometry", getPose());
